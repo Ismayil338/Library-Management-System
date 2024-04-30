@@ -23,6 +23,16 @@ public class Dashboard extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Home Page", new HomePagePanel());
+
+        if (role.equals("admin")) {
+            DefaultTableModel usersModel = new DefaultTableModel();
+            usersModel.addColumn("Username");
+            usersModel.addColumn("Password");
+
+            UsersPanel usersPanel = new UsersPanel(usersModel);
+            usersPanel.loadUsersData();
+            tabbedPane.addTab("Users", usersPanel);
+        }
         
         if (!role.equals("admin")) {
             DefaultTableModel personalModel = new DefaultTableModel();
