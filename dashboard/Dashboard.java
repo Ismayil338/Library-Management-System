@@ -48,7 +48,7 @@ public class Dashboard extends JFrame {
             personalModel.addColumn("User review");
 
             PersonalDatabasePanel personalDatabasePanel = new PersonalDatabasePanel(personalModel);
-            personalDatabasePanel.loadPersonalCsvData();
+            personalDatabasePanel.loadPersonalCsvData(username);
 
             tabbedPane.addTab("Personal Database", personalDatabasePanel);
         }

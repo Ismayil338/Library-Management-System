@@ -105,8 +105,8 @@ public class PersonalDatabasePanel extends JPanel {
         });
     }
 
-    public void loadPersonalCsvData() {
-        String filePath = "userdatabases/" + ".csv";
+    public void loadPersonalCsvData(String username) {
+        String filePath = "userdatabases/" + username + ".csv";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
