@@ -85,11 +85,4 @@ public class Dashboard extends JFrame {
 
         return topPanel;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Dashboard dashboard = new Dashboard("example", "Example");
-            dashboard.setVisible(true);
-        });
-    }
 }
