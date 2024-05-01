@@ -6,6 +6,7 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.event.DocumentEvent;
@@ -17,6 +18,13 @@ public class GeneralDatabasePanel extends JPanel {
     public GeneralDatabasePanel(DefaultTableModel model) {
         this.model = model;
         setLayout(new BorderLayout());
+
+        File databaseFile = new File("generaldatabase/generaldatabase.csv");
+        if (!databaseFile.exists()) {
+            String sourceFilePath = "generaldatabase/brodsky.csv";
+            String destinationFilePath = "generaldatabase/generaldatabase.csv";
+            GeneralDatabaseGenerator.copyAndRenameCSVFile(sourceFilePath, destinationFilePath);
+        }
 
         JTable dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
@@ -78,7 +86,7 @@ public class GeneralDatabasePanel extends JPanel {
     }
 
     public void loadCSVData() {
-        try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/brodsky.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.endsWith(",")) {
