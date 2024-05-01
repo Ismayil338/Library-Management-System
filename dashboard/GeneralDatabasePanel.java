@@ -81,8 +81,6 @@ public class GeneralDatabasePanel extends JPanel {
                 }
             }
         });
-
-        loadCSVData();
     }
 
     public void loadCSVData() {

@@ -52,7 +52,7 @@ public class GeneralDatabaseDialog extends JDialog {
     }
 
     private void loadCSVData(DefaultTableModel model) {
-        try (BufferedReader br = new BufferedReader(new FileReader("brodsky.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.endsWith(",")) {
