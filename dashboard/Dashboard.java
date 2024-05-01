@@ -8,16 +8,16 @@ import java.awt.*;
 public class Dashboard extends JFrame {
     public final String username;
 
-    public Dashboard(String username, String role) {
+    public Dashboard(String username, String role, boolean isAdmin) {
         this.username = username;
         setTitle("Dashboard");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        initComponents(username, role);
+        initComponents(username, role, isAdmin);
     }
 
-    private void initComponents(String username, String role) {
+    private void initComponents(String username, String role, boolean isAdmin) {
         JPanel topPanel = createTopPanel(username, role);
         add(topPanel, BorderLayout.NORTH);
 
@@ -59,7 +59,7 @@ public class Dashboard extends JFrame {
         generalModel.addColumn("Review");
         generalModel.addColumn("Rating");
 
-        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(generalModel);
+        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(generalModel, isAdmin);
         generalDatabasePanel.loadCSVData();
 
         tabbedPane.addTab("General Database", generalDatabasePanel);

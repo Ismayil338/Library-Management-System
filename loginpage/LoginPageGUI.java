@@ -94,8 +94,9 @@ public class LoginPageGUI extends JFrame {
 
     private void openDashboard(String username, String role) {
         dispose();
+        boolean isAdmin = role.equals("admin");
         EventQueue.invokeLater(() -> SwingUtilities.invokeLater(() -> {
-            Dashboard dashboardGUI = new Dashboard(username, role);
+            Dashboard dashboardGUI = new Dashboard(username, role, isAdmin);
             dashboardGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             dashboardGUI.setVisible(true);
         }));

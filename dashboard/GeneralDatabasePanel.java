@@ -8,14 +8,16 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class GeneralDatabasePanel extends JPanel {
     private final DefaultTableModel model;
+    private JTable dataTable;
 
-    public GeneralDatabasePanel(DefaultTableModel model) {
+    public GeneralDatabasePanel(DefaultTableModel model, boolean isAdmin) {
         this.model = model;
         setLayout(new BorderLayout());
 
@@ -26,7 +28,7 @@ public class GeneralDatabasePanel extends JPanel {
             GeneralDatabaseGenerator.copyAndRenameCSVFile(sourceFilePath, destinationFilePath);
         }
 
-        JTable dataTable = new JTable(model);
+        dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         add(scrollPane, BorderLayout.CENTER);
 
@@ -38,9 +40,16 @@ public class GeneralDatabasePanel extends JPanel {
 
         buttonPanel.add(addButton);
         buttonPanel.add(deleteButton);
+        
+
+        if (isAdmin) {
+            JButton updateButton = new JButton("Update");
+            buttonPanel.add(updateButton);
+            updateButton.addActionListener(e -> updateSelectedRow());
+        }
+
         buttonPanel.add(searchField);
         buttonPanel.add(searchButton);
-
         add(buttonPanel, BorderLayout.NORTH);
 
         searchButton.addActionListener(e -> {
@@ -113,6 +122,54 @@ public class GeneralDatabasePanel extends JPanel {
         }
     }
 
+    private void updateSelectedRow() {
+        int selectedRow = dataTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
+        String[] rowData = new String[dataTable.getColumnCount()];
+        for (int i = 0; i < rowData.length; i++) {
+            Object value = dataTable.getValueAt(selectedRow, i);
+            rowData[i] = value != null ? value.toString() : "";
+        }
+    
+        JTextField[] textFields = new JTextField[rowData.length];
+        for (int i = 0; i < rowData.length; i++) {
+            textFields[i] = new JTextField(rowData[i]);
+        }
+    
+        int option = JOptionPane.showConfirmDialog(this, textFields, "Edit Row", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < rowData.length; i++) {
+                model.setValueAt(textFields[i].getText(), selectedRow, i);
+            }
+    
+            // Save changes to the CSV file
+            saveCSVData();
+        }
+    }
+
+    private void saveCSVData() {
+    try (FileWriter writer = new FileWriter("generaldatabase/generaldatabase.csv")) {
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                String value = model.getValueAt(i, j).toString();
+                writer.append(value);
+                if (j < model.getColumnCount() - 1) {
+                    writer.append(",");
+                }
+            }
+            writer.append("\n");
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    
     private String removeQuotationMarks(String s) {
         return s.replace("\"", "");
     }
