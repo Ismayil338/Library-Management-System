@@ -27,8 +27,6 @@ public class GeneralDatabaseGenerator {
             // Copy the file
             Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("File copied and renamed successfully.");
-
-            // Open the copied file
         } catch (IOException e) {
             System.err.println("Error copying or renaming the file: " + e.getMessage());
         }

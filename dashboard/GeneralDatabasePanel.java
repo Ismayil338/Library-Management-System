@@ -117,6 +117,7 @@ public class GeneralDatabasePanel extends JPanel {
                     }
                 }
             }
+            saveCSVData();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,13 +137,13 @@ public class GeneralDatabasePanel extends JPanel {
         }
     
         JTextField[] textFields = new JTextField[rowData.length];
-        for (int i = 0; i < rowData.length; i++) {
+        for (int i = 0; i < 2; i++) {
             textFields[i] = new JTextField(rowData[i]);
         }
     
         int option = JOptionPane.showConfirmDialog(this, textFields, "Edit Row", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
-            for (int i = 0; i < rowData.length; i++) {
+            for (int i = 0; i < 2; i++) {
                 model.setValueAt(textFields[i].getText(), selectedRow, i);
             }
     
