@@ -1,6 +1,5 @@
 package dashboard;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +29,6 @@ public class GeneralDatabaseGenerator {
             System.out.println("File copied and renamed successfully.");
 
             // Open the copied file
-            Desktop.getDesktop().open(destinationFile);
         } catch (IOException e) {
             System.err.println("Error copying or renaming the file: " + e.getMessage());
         }
