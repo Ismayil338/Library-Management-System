@@ -6,7 +6,6 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,35 +13,31 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class GeneralDatabasePanel extends JPanel {
-    private final DefaultTableModel model;
+    public final DefaultTableModel model;
     private JTable dataTable;
 
     public GeneralDatabasePanel(DefaultTableModel model, boolean isAdmin) {
         this.model = model;
         setLayout(new BorderLayout());
-
-        File databaseFile = new File("generaldatabase/generaldatabase.csv");
-        if (!databaseFile.exists()) {
-            String sourceFilePath = "generaldatabase/brodsky.csv";
-            String destinationFilePath = "generaldatabase/generaldatabase.csv";
-            GeneralDatabaseGenerator.copyAndRenameCSVFile(sourceFilePath, destinationFilePath);
-        }
-
+        
         dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton addButton = new JButton("Add");
-        JButton deleteButton = new JButton("Delete");
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
-
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
         
 
         if (isAdmin) {
+            JButton addButton = new JButton("Add");
+            buttonPanel.add(addButton);
+            addButton.addActionListener(null);
+
+            JButton deleteButton = new JButton("Delete");
+            buttonPanel.add(deleteButton);
+            deleteButton.addActionListener(null);
+
             JButton updateButton = new JButton("Update");
             buttonPanel.add(updateButton);
             updateButton.addActionListener(e -> updateSelectedRow());
@@ -90,7 +85,7 @@ public class GeneralDatabasePanel extends JPanel {
                 }
             }
         });
-    }
+    }    
 
     public void loadCSVData() {
         try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
@@ -117,7 +112,19 @@ public class GeneralDatabasePanel extends JPanel {
                     }
                 }
             }
-            saveCSVData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        saveCSVData();
+    }
+
+    public void loadCSVDataAfterDatabaseCreated() {
+        try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                model.addRow(data);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -153,23 +160,22 @@ public class GeneralDatabasePanel extends JPanel {
     }
 
     private void saveCSVData() {
-    try (FileWriter writer = new FileWriter("generaldatabase/generaldatabase.csv")) {
-        for (int i = 0; i < model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                String value = model.getValueAt(i, j).toString();
-                writer.append(value);
-                if (j < model.getColumnCount() - 1) {
-                    writer.append(",");
+        try (FileWriter writer = new FileWriter("generaldatabase/generaldatabase.csv")) {
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    String value = model.getValueAt(i, j).toString();
+                    writer.append(value);
+                    if (j < model.getColumnCount() - 1) {
+                        writer.append(",");
+                    }
                 }
+                writer.append("\n");
             }
-            writer.append("\n");
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
-
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }   
+    } 
     
     private String removeQuotationMarks(String s) {
         return s.replace("\"", "");

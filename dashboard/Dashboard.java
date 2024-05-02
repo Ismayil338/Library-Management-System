@@ -4,6 +4,10 @@ import loginpage.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class Dashboard extends JFrame {
     public final String username;
@@ -60,7 +64,22 @@ public class Dashboard extends JFrame {
         generalModel.addColumn("Rating");
 
         GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(generalModel, isAdmin);
-        generalDatabasePanel.loadCSVData();
+        String sourceFilePath = "generaldatabase/brodsky.csv";
+        String destinationFilePath = "generaldatabase/generaldatabase.csv";
+        File sourceFile = new File(sourceFilePath);
+        File destinationFile = new File(destinationFilePath);
+        File csvFile = new File("generaldatabase/generaldatabase.csv");
+        if (!csvFile.exists()) {
+            try {
+                csvFile.createNewFile();
+                Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                generalDatabasePanel.loadCSVData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        generalDatabasePanel.loadCSVDataAfterDatabaseCreated();
 
         tabbedPane.addTab("General Database", generalDatabasePanel);
         add(tabbedPane, BorderLayout.CENTER);
