@@ -19,7 +19,7 @@ public class GeneralDatabasePanel extends JPanel {
     public GeneralDatabasePanel(DefaultTableModel model, boolean isAdmin) {
         this.model = model;
         setLayout(new BorderLayout());
-        
+
         dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         add(scrollPane, BorderLayout.CENTER);
@@ -28,15 +28,14 @@ public class GeneralDatabasePanel extends JPanel {
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
         
-
         if (isAdmin) {
             JButton addButton = new JButton("Add");
             buttonPanel.add(addButton);
-            addButton.addActionListener(null);
+            addButton.addActionListener(e -> addData());
 
             JButton deleteButton = new JButton("Delete");
             buttonPanel.add(deleteButton);
-            deleteButton.addActionListener(null);
+            deleteButton.addActionListener(e -> deleteSelectedRow());
 
             JButton updateButton = new JButton("Update");
             buttonPanel.add(updateButton);
@@ -179,5 +178,42 @@ public class GeneralDatabasePanel extends JPanel {
     
     private String removeQuotationMarks(String s) {
         return s.replace("\"", "");
+    }
+
+    public void addData() {
+        JTextField titleField = new JTextField(10);
+        JTextField authorField = new JTextField(10);
+
+        JPanel inputPanel = new JPanel(new GridLayout(0, 2));
+        inputPanel.add(new JLabel("Title:"));
+        inputPanel.add(titleField);
+        inputPanel.add(new JLabel("Author:"));
+        inputPanel.add(authorField);
+
+        int option = JOptionPane.showConfirmDialog(this, inputPanel, "Add New Entry", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String title = titleField.getText().trim();
+            String author = authorField.getText().trim();
+            if (!title.isEmpty() && !author.isEmpty()) {
+                model.addRow(new Object[]{title, author, "No Review", "No Rating"});
+                saveCSVData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please enter both title and author.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void deleteSelectedRow() {
+        int selectedRow = dataTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirmDelete = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this row?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+        if (confirmDelete == JOptionPane.YES_OPTION) {
+            model.removeRow(selectedRow);
+            saveCSVData();
+        }
     }
 }
