@@ -3,6 +3,7 @@ package dashboard;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import loginpage.LoginPageGUI;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -14,9 +15,10 @@ import javax.swing.event.DocumentListener;
 
 public class GeneralDatabasePanel extends JPanel {
     public final DefaultTableModel model;
-    private JTable dataTable;
+    private final JTable dataTable;
+    private LoginPageGUI loginPageGUI;
 
-    public GeneralDatabasePanel(DefaultTableModel model, boolean isAdmin) {
+    public GeneralDatabasePanel(String username, DefaultTableModel model, boolean isAdmin) {
         this.model = model;
         setLayout(new BorderLayout());
 
@@ -40,6 +42,12 @@ public class GeneralDatabasePanel extends JPanel {
             JButton updateButton = new JButton("Update");
             buttonPanel.add(updateButton);
             updateButton.addActionListener(e -> updateSelectedRow());
+        } else {
+            JButton addToPersonalDatabaseButton = new JButton("Add to personal database");
+            buttonPanel.add(addToPersonalDatabaseButton);
+            loginPageGUI = new LoginPageGUI();
+            loginPageGUI.setVisible(false); 
+            addToPersonalDatabaseButton.addActionListener(e -> addToPersonalDatabase(username));
         }
 
         buttonPanel.add(searchField);
@@ -214,6 +222,37 @@ public class GeneralDatabasePanel extends JPanel {
         if (confirmDelete == JOptionPane.YES_OPTION) {
             model.removeRow(selectedRow);
             saveCSVData();
+        }
+    }
+
+    public void addToPersonalDatabase(String username) {
+        // Get the selected row in the JTable
+        int selectedRow = dataTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Select a row to add to your personal database.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
+        // Get the data from the selected row
+        Object[] rowData = new Object[dataTable.getColumnCount()];
+        for (int i = 0; i < rowData.length; i++) {
+            rowData[i] = dataTable.getValueAt(selectedRow, i);
+        }
+    
+        int confirmAdd = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this row to your personal database?", "Confirm Addition", JOptionPane.YES_NO_OPTION);
+        if (confirmAdd == JOptionPane.YES_OPTION) {
+            // Write the data to the user's personal database CSV file
+            String personalDatabaseFilePath = "userdatabases/" + username + ".csv";
+            try (FileWriter writer = new FileWriter(personalDatabaseFilePath, true)) {
+                for (Object data : rowData) {
+                    writer.append(data.toString()).append(",");
+                }
+                writer.append("\n");
+                JOptionPane.showMessageDialog(this, "Row added to your personal database successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error adding row to your personal database.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

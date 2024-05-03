@@ -7,6 +7,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -14,7 +15,7 @@ import javax.swing.event.DocumentListener;
 public class PersonalDatabasePanel extends JPanel {
     private final DefaultTableModel model;
 
-    public PersonalDatabasePanel(DefaultTableModel model) {
+    public PersonalDatabasePanel(DefaultTableModel model, String username) {
         this.model = model;
         setLayout(new BorderLayout());
 
@@ -23,45 +24,27 @@ public class PersonalDatabasePanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton addButton = new JButton("Add");
         JButton deleteButton = new JButton("Delete");
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
 
-        buttonPanel.add(addButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(searchField);
         buttonPanel.add(searchButton);
 
         add(buttonPanel, BorderLayout.NORTH);
 
-        addButton.addActionListener(e -> {
-            JFrame parentFrame = (JFrame) SwingUtilities.getRoot(this);
-            GeneralDatabaseDialog dialog = new GeneralDatabaseDialog(parentFrame);
-            dialog.setVisible(true);
-
-            DefaultTableModel generalModel = dialog.getModel();
-            JTable generalTable = new JTable(generalModel);
-            JScrollPane generalScrollPane = new JScrollPane(generalTable);
-
-            JOptionPane.showMessageDialog(parentFrame, generalScrollPane, "General Database", JOptionPane.PLAIN_MESSAGE);
-
-            int selectedRow = generalTable.getSelectedRow();
-            if (selectedRow != -1) {
-                Object[] rowData = new Object[generalModel.getColumnCount()];
-                for (int i = 0; i < generalModel.getColumnCount(); i++) {
-                    rowData[i] = generalModel.getValueAt(selectedRow, i);
-                }
-                model.addRow(rowData);
-            }
-        });
-
         deleteButton.addActionListener(e -> {
-            int selectedRow = dataTable.getSelectedRow(); // Get selected row index
-            if (selectedRow != -1) {
-                model.removeRow(selectedRow); // Remove selected row from personal database
-            } else {
-                JOptionPane.showMessageDialog(this, "Please select a row to delete.", "Delete Error", JOptionPane.ERROR_MESSAGE);
+            int selectedRow = dataTable.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int confirmDelete = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this row?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+            if (confirmDelete == JOptionPane.YES_OPTION) {
+                model.removeRow(selectedRow);
+                savePersonalCSVData(username);
             }
         });
 
@@ -116,5 +99,23 @@ public class PersonalDatabasePanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+        private void savePersonalCSVData(String username) {
+        try (FileWriter writer = new FileWriter("userdatabases/" + username + ".csv")) {
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    String value = model.getValueAt(i, j).toString();
+                    writer.append(value);
+                    if (j < model.getColumnCount() - 1) {
+                        writer.append(",");
+                    }
+                }
+                writer.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }   
     }
 }

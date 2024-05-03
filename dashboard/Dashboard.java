@@ -51,7 +51,7 @@ public class Dashboard extends JFrame {
             personalModel.addColumn("User rating");
             personalModel.addColumn("User review");
 
-            PersonalDatabasePanel personalDatabasePanel = new PersonalDatabasePanel(personalModel);
+            PersonalDatabasePanel personalDatabasePanel = new PersonalDatabasePanel(personalModel, username);
             personalDatabasePanel.loadPersonalCsvData(username);
 
             tabbedPane.addTab("Personal Database", personalDatabasePanel);
@@ -63,7 +63,7 @@ public class Dashboard extends JFrame {
         generalModel.addColumn("Review");
         generalModel.addColumn("Rating");
 
-        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(generalModel, isAdmin);
+        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(username, generalModel, isAdmin);
         String sourceFilePath = "generaldatabase/brodsky.csv";
         String destinationFilePath = "generaldatabase/generaldatabase.csv";
         File sourceFile = new File(sourceFilePath);

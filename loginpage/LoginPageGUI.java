@@ -48,14 +48,11 @@ public class LoginPageGUI extends JFrame {
         signUpLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dispose();
-                EventQueue.invokeLater(() -> {
-                    SwingUtilities.invokeLater(() -> {
-                        JFrame signUpFrame = new SignUpPageGUI(LoginPageGUI.this);
-                        signUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        signUpFrame.setVisible(true);
-                    });
-
-                });
+                EventQueue.invokeLater(() -> SwingUtilities.invokeLater(() -> {
+                    JFrame signUpFrame = new SignUpPageGUI(LoginPageGUI.this);
+                    signUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    signUpFrame.setVisible(true);
+                }));
             }
         });
 
@@ -102,4 +99,3 @@ public class LoginPageGUI extends JFrame {
         }));
     }
 }
-
