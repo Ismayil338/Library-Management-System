@@ -25,14 +25,20 @@ public class PersonalDatabasePanel extends JPanel {
 
         JPanel buttonPanel = new JPanel();
         JButton deleteButton = new JButton("Delete");
+        JButton refreshButton = new JButton("Refresh");
         JTextField searchField = new JTextField(20);
         JButton searchButton = new JButton("Search");
 
         buttonPanel.add(deleteButton);
+        buttonPanel.add(refreshButton);
         buttonPanel.add(searchField);
         buttonPanel.add(searchButton);
 
         add(buttonPanel, BorderLayout.NORTH);
+
+        refreshButton.addActionListener(e -> {
+            loadPersonalCsvDataAfterRefresh(username);
+        });
 
         deleteButton.addActionListener(e -> {
             int selectedRow = dataTable.getSelectedRow();
@@ -101,7 +107,23 @@ public class PersonalDatabasePanel extends JPanel {
         }
     }
 
-        private void savePersonalCSVData(String username) {
+    public void loadPersonalCsvDataAfterRefresh(String username) {
+        String filePath = "userdatabases/" + username + ".csv";
+        // Clear existing data from the table
+        model.setRowCount(0); 
+    
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                model.addRow(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void savePersonalCSVData(String username) {
         try (FileWriter writer = new FileWriter("userdatabases/" + username + ".csv")) {
             for (int i = 0; i < model.getRowCount(); i++) {
                 for (int j = 0; j < model.getColumnCount(); j++) {

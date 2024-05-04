@@ -3,7 +3,6 @@ package dashboard;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import loginpage.LoginPageGUI;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -15,8 +14,8 @@ import javax.swing.event.DocumentListener;
 
 public class GeneralDatabasePanel extends JPanel {
     public final DefaultTableModel model;
-    private final JTable dataTable;
-    private LoginPageGUI loginPageGUI;
+    public final JTable dataTable;
+    private PersonalDatabasePanel personalDatabasePanel;
 
     public GeneralDatabasePanel(String username, DefaultTableModel model, boolean isAdmin) {
         this.model = model;
@@ -45,8 +44,6 @@ public class GeneralDatabasePanel extends JPanel {
         } else {
             JButton addToPersonalDatabaseButton = new JButton("Add to personal database");
             buttonPanel.add(addToPersonalDatabaseButton);
-            loginPageGUI = new LoginPageGUI();
-            loginPageGUI.setVisible(false); 
             addToPersonalDatabaseButton.addActionListener(e -> addToPersonalDatabase(username));
         }
 
@@ -249,6 +246,9 @@ public class GeneralDatabasePanel extends JPanel {
                 }
                 writer.append("\n");
                 JOptionPane.showMessageDialog(this, "Row added to your personal database successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                personalDatabasePanel = new PersonalDatabasePanel(model, username);
+                personalDatabasePanel.loadPersonalCsvData(username);
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error adding row to your personal database.", "Error", JOptionPane.ERROR_MESSAGE);
