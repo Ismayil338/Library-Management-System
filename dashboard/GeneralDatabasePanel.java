@@ -16,6 +16,8 @@ public class GeneralDatabasePanel extends JPanel {
     public final DefaultTableModel model;
     public final JTable dataTable;
     private PersonalDatabasePanel personalDatabasePanel;
+    private int BookID = 1;
+    private final int[] visibleColumns = {1, 2, 3, 4};
 
     public GeneralDatabasePanel(String username, DefaultTableModel model, boolean isAdmin) {
         this.model = model;
@@ -97,15 +99,15 @@ public class GeneralDatabasePanel extends JPanel {
             while ((line = br.readLine()) != null) {
                 if (line.endsWith(",")) {
                     String title = line.substring(0, line.length() - 1).trim();
-                    model.addRow(new Object[]{removeQuotationMarks(title), "No Author", "No Review", "No Rating"});
+                    model.addRow(new Object[]{removeQuotationMarks(title), "Unknown", "No Review", "No Rating"});
                 } else if (line.startsWith(",")) {
                     String author = line.substring(1).trim();
-                    model.addRow(new Object[]{"No Title", author, "No Review", "No Rating"});
+                    model.addRow(new Object[]{"Unknown", author, "No Review", "No Rating"});
                 } else {
                     String[] data = line.split(",");
                     String author = data[data.length - 1].trim();
                     if (author.isEmpty()) {
-                        author = "No Author";
+                        author = "Unknown";
                     }
                     for (int i = 0; i < data.length - 1; i++) {
                         String title = data[i].trim();
@@ -127,7 +129,13 @@ public class GeneralDatabasePanel extends JPanel {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                model.addRow(data);
+                if (data.length >= visibleColumns.length) {
+                    Object[] rowData = new Object[visibleColumns.length];
+                    for (int i = 0; i < visibleColumns.length; i++) {
+                        rowData[i] = data[visibleColumns[i]].trim();
+                    }
+                    model.addRow(rowData);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,6 +174,7 @@ public class GeneralDatabasePanel extends JPanel {
     private void saveCSVData() {
         try (FileWriter writer = new FileWriter("generaldatabase/generaldatabase.csv")) {
             for (int i = 0; i < model.getRowCount(); i++) {
+                writer.append(Integer.toString(BookID + i)).append(","); // Write sequential book ID
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     String value = model.getValueAt(i, j).toString();
                     writer.append(value);
@@ -175,12 +184,13 @@ public class GeneralDatabasePanel extends JPanel {
                 }
                 writer.append("\n");
             }
+            BookID = 1;
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
-        }   
-    } 
-    
+        }
+    }
+
     private String removeQuotationMarks(String s) {
         return s.replace("\"", "");
     }
