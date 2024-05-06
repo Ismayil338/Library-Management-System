@@ -140,4 +140,6 @@ public class PersonalDatabasePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
         }   
     }
+
+    
 }
