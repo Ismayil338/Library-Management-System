@@ -100,13 +100,18 @@ public class PersonalDatabasePanel extends JPanel {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                model.addRow(data);
+                // Skip adding the first column (ID) to the table model
+                if (data.length > 1) {
+                    String[] rowData = new String[data.length - 1];
+                    System.arraycopy(data, 1, rowData, 0, data.length - 1);
+                    model.addRow(rowData);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    
     public void loadPersonalCsvDataAfterRefresh(String username) {
         String filePath = "userdatabases/" + username + ".csv";
         // Clear existing data from the table
@@ -116,12 +121,18 @@ public class PersonalDatabasePanel extends JPanel {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                model.addRow(data);
+                // Skip adding the first column (ID) to the table model
+                if (data.length > 1) {
+                    String[] rowData = new String[data.length - 1];
+                    System.arraycopy(data, 1, rowData, 0, data.length - 1);
+                    model.addRow(rowData);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
 
     private void savePersonalCSVData(String username) {
         try (FileWriter writer = new FileWriter("userdatabases/" + username + ".csv")) {

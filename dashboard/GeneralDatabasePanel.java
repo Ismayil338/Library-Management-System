@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -168,6 +169,7 @@ public class GeneralDatabasePanel extends JPanel {
     
             // Save changes to the CSV file
             saveCSVData();
+
         }
     }
 
@@ -233,30 +235,35 @@ public class GeneralDatabasePanel extends JPanel {
     }
 
     public void addToPersonalDatabase(String username) {
-        // Get the selected row in the JTable
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Select a row to add to your personal database.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
     
-        // Get the data from the selected row
-        Object[] rowData = new Object[dataTable.getColumnCount()];
-        for (int i = 0; i < rowData.length; i++) {
-            rowData[i] = dataTable.getValueAt(selectedRow, i);
+        String bookID = getBookIdFromGeneralDatabase(selectedRow);
+        if (bookID == null) {
+            JOptionPane.showMessageDialog(this, "Error retrieving BookID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+    
+        String title = dataTable.getValueAt(selectedRow, 0).toString(); // Assuming Title is in the first column
+        String author = dataTable.getValueAt(selectedRow, 1).toString(); // Assuming Author is in the second column
+        String review = dataTable.getValueAt(selectedRow, 2).toString(); // Assuming Review is in the third column
+        String rating = dataTable.getValueAt(selectedRow, 3).toString(); // Assuming Rating is in the fourth column
     
         int confirmAdd = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this row to your personal database?", "Confirm Addition", JOptionPane.YES_NO_OPTION);
         if (confirmAdd == JOptionPane.YES_OPTION) {
-            // Write the data to the user's personal database CSV file
             String personalDatabaseFilePath = "userdatabases/" + username + ".csv";
             try (FileWriter writer = new FileWriter(personalDatabaseFilePath, true)) {
-                for (Object data : rowData) {
-                    writer.append(data.toString()).append(",");
-                }
-                writer.append("\n");
+                writer.append(bookID).append(",");
+                writer.append(title).append(",");
+                writer.append(author).append(",");
+                writer.append(review).append(",");
+                writer.append(rating).append("\n");
+    
                 JOptionPane.showMessageDialog(this, "Row added to your personal database successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-
+    
                 personalDatabasePanel = new PersonalDatabasePanel(model, username);
                 personalDatabasePanel.loadPersonalCsvData(username);
             } catch (IOException e) {
@@ -265,4 +272,27 @@ public class GeneralDatabasePanel extends JPanel {
             }
         }
     }
+    
+
+    private String getBookIdFromGeneralDatabase(int selectedRow) {
+        String bookID = null;
+        try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
+            String line;  
+            int currentRow = 0;
+
+            while ((line = br.readLine()) != null) {
+                if (currentRow == selectedRow) {
+                    String[] data = line.split(",");
+                    if (data.length > 0) {
+                        bookID = data[0].trim();
+                        break;
+                    }
+                }
+                currentRow++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bookID;
+    }       
 }

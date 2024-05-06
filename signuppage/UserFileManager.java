@@ -15,7 +15,7 @@ public class UserFileManager {
             }
 
             try (PrintWriter printWriter = new PrintWriter(new FileWriter(filePath))) {
-                printWriter.println("Title,Author,Rating,Review,Status,TimeSpent,StartDate,EndDate,UserRating,UserReview");
+                printWriter.println("ID,Title,Author,Rating,Review,Status,TimeSpent,StartDate,EndDate,UserRating,UserReview");
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
