@@ -6,9 +6,12 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -180,7 +183,6 @@ public class GeneralDatabasePanel extends JPanel {
     }
 
     private void updateSelectedRow(String username) {
-        personalDatabasePanel = new PersonalDatabasePanel(model, username);
 
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
@@ -211,12 +213,10 @@ public class GeneralDatabasePanel extends JPanel {
                 model.setValueAt(textFields[i].getText(), selectedRow, i);
             }
 
-            // Update the corresponding row in the personal database
-
             // Save changes to the CSV files
             saveCSVData();
         }
-    }    
+    }        
 
     private void saveCSVData() {
         String filePath = "generaldatabase/generaldatabase.csv";
@@ -239,7 +239,7 @@ public class GeneralDatabasePanel extends JPanel {
                 }
                 writer.append("\n");
             }
-            BookID += model.getRowCount(); // Increment BookID by the number of rows added
+            BookID = 1;
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);

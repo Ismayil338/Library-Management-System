@@ -101,7 +101,7 @@ public class PersonalDatabasePanel extends JPanel {
                 }
             }
         });
-        initializeSorting(dataTable);
+        //initializeSorting(dataTable);
     }
 
     public void loadPersonalCsvData(String username) {
@@ -221,21 +221,7 @@ public class PersonalDatabasePanel extends JPanel {
         });
     }
 
-    public void updateBookEntry(String bookID, String title, String author, String review, String rating,
-            String username) {
-        // Find the row in the table with the corresponding bookID
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String currentBookID = model.getValueAt(i, 0).toString(); // Assuming bookID is stored in the first column
-            if (currentBookID.equals(bookID)) {
-                // Update the book entry in the table
-                model.setValueAt(title, i, 1); // Assuming title is stored in the second column
-                model.setValueAt(author, i, 2); // Assuming author is stored in the third column
-                model.setValueAt(review, i, 3); // Assuming review is stored in the fourth column
-                model.setValueAt(rating, i, 4); // Assuming rating is stored in the fifth column
-                // You can update other columns as needed
-                break; // Exit the loop once the book is found and updated
-            }
-        }
-        savePersonalCSVData(username); // Save the updated data to the CSV file
-    }
+
+    
+    
 }
