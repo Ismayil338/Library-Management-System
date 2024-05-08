@@ -26,6 +26,7 @@ public class GeneralDatabasePanel extends JPanel {
         dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         add(scrollPane, BorderLayout.CENTER);
+        initializeSorting();
 
         JPanel buttonPanel = new JPanel();
         JTextField searchField = new JTextField(20);
@@ -93,39 +94,34 @@ public class GeneralDatabasePanel extends JPanel {
         });
     }
 
-    // public void loadCSVData() {
-    // try (BufferedReader br = new BufferedReader(new
-    // FileReader("generaldatabase/generaldatabase.csv"))) {
-    // String line;
-    // while ((line = br.readLine()) != null) {
-    // if (line.endsWith(",")) {
-    // String title = line.substring(0, line.length() - 1).trim();
-    // model.addRow(new Object[]{removeQuotationMarks(title), "Unknown", "No
-    // Review", "No Rating"});
-    // } else if (line.startsWith(",")) {
-    // String author = line.substring(1).trim();
-    // model.addRow(new Object[]{"Unknown", author, "No Review", "No Rating"});
-    // } else {
-    // String[] data = line.split(",");
-    // String author = data[data.length - 1].trim();
-    // if (author.isEmpty()) {
-    // author = "Unknown";
-    // }
-    // for (int i = 0; i < data.length - 1; i++) {
-    // String title = data[i].trim();
-    // if (title.isEmpty()) {
-    // continue;
-    // }
-    // model.addRow(new Object[]{removeQuotationMarks(title), author, "No Review",
-    // "No Rating"});
-    // }
-    // }
-    // }
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // saveCSVData();
-    // }
+    private void initializeSorting() {
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        dataTable.setRowSorter(sorter);
+
+        sorter.setComparator(0, (Object o1, Object o2) -> {
+            String title1 = o1.toString();
+            String title2 = o2.toString();
+            return title1.compareToIgnoreCase(title2);
+        });
+
+        sorter.setComparator(1, (Object o1, Object o2) -> {
+            String author1 = o1.toString();
+            String author2 = o2.toString();
+            return author1.compareToIgnoreCase(author2);
+        });
+
+        sorter.setComparator(2, (Object o1, Object o2) -> {
+            String review1 = o1.toString();
+            String review2 = o2.toString();
+            return review1.compareToIgnoreCase(review2);
+        });
+
+        sorter.setComparator(3, (Object o1, Object o2) -> {
+            Integer rating1 = Integer.parseInt(o1.toString());
+            Integer rating2 = Integer.parseInt(o2.toString());
+            return rating1.compareTo(rating2);
+        });
+    }
 
     public void loadCSVData() {
         try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {

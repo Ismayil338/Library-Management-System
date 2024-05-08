@@ -60,7 +60,7 @@ public class PersonalDatabasePanel extends JPanel {
         });
 
         startButton.addActionListener(e -> {
-            
+
         });
 
         searchButton.addActionListener(e -> {
@@ -101,6 +101,7 @@ public class PersonalDatabasePanel extends JPanel {
                 }
             }
         });
+        initializeSorting(dataTable);
     }
 
     public void loadPersonalCsvData(String username) {
@@ -161,7 +162,67 @@ public class PersonalDatabasePanel extends JPanel {
         }
     }
 
-    public void updateBookEntry(String bookID, String title, String author, String review, String rating, String username) {
+    private void initializeSorting(JTable dataTable) {
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        dataTable.setRowSorter(sorter);
+
+        sorter.setComparator(0, (Object o1, Object o2) -> {
+            String title1 = o1.toString();
+            String title2 = o2.toString();
+            return title1.compareToIgnoreCase(title2);
+        });
+
+        sorter.setComparator(1, (Object o1, Object o2) -> {
+            String author1 = o1.toString();
+            String author2 = o2.toString();
+            return author1.compareToIgnoreCase(author2);
+        });
+
+        sorter.setComparator(2, (Object o1, Object o2) -> {
+            String review1 = o1.toString();
+            String review2 = o2.toString();
+            return review1.compareToIgnoreCase(review2);
+        });
+
+        sorter.setComparator(3, (Object o1, Object o2) -> {
+            Integer rating1 = Integer.parseInt(o1.toString());
+            Integer rating2 = Integer.parseInt(o2.toString());
+            return rating1.compareTo(rating2);
+        });
+
+        sorter.setComparator(4, (Object o1, Object o2) -> {
+            String timeSpent1 = o1.toString();
+            String timeSpent2 = o2.toString();
+            return timeSpent1.compareToIgnoreCase(timeSpent2);
+        });
+
+        sorter.setComparator(5, (Object o1, Object o2) -> {
+            String startDate1 = o1.toString();
+            String startDate2 = o2.toString();
+            return startDate1.compareTo(startDate2);
+        });
+
+        sorter.setComparator(6, (Object o1, Object o2) -> {
+            String endDate1 = o1.toString();
+            String endDate2 = o2.toString();
+            return endDate1.compareTo(endDate2);
+        });
+
+        sorter.setComparator(7, (Object o1, Object o2) -> {
+            String userReview1 = o1.toString();
+            String userReview2 = o2.toString();
+            return userReview1.compareToIgnoreCase(userReview2);
+        });
+
+        sorter.setComparator(8, (Object o1, Object o2) -> {
+            Integer userRating1 = Integer.parseInt(o1.toString());
+            Integer userRating2 = Integer.parseInt(o2.toString());
+            return userRating1.compareTo(userRating2);
+        });
+    }
+
+    public void updateBookEntry(String bookID, String title, String author, String review, String rating,
+            String username) {
         // Find the row in the table with the corresponding bookID
         for (int i = 0; i < model.getRowCount(); i++) {
             String currentBookID = model.getValueAt(i, 0).toString(); // Assuming bookID is stored in the first column
