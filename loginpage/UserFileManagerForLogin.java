@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class UserFileManager {
+public class UserFileManagerForLogin {
     private static final String USER_FILE_PATH = "users.csv";
 
     public static boolean checkCredentials(String username, String password) {

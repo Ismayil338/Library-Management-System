@@ -76,7 +76,7 @@ public class LoginPageGUI extends JFrame {
             return;
         }
 
-        if (!UserFileManager.checkCredentials(username, password)) {
+        if (!UserFileManagerForLogin.checkCredentials(username, password)) {
             JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }

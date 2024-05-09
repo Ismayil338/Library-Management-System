@@ -2,7 +2,7 @@ package signuppage;
 
 import java.io.*;
 
-public class UserFileManager {
+public class UserFileManagerForSignUp {
     private static final String USER_FOLDER_PATH = "userdatabases";
 
     public static boolean saveUser(String username) {

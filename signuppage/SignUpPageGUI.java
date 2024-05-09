@@ -98,12 +98,12 @@ public class SignUpPageGUI extends JFrame {
             return;
         }
 
-        if (UserFileManager.checkUsername(username)) {
+        if (UserFileManagerForSignUp.checkUsername(username)) {
             JOptionPane.showMessageDialog(this, "Username already exists", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (!UserFileManager.saveUser(username)) {
+        if (!UserFileManagerForSignUp.saveUser(username)) {
             JOptionPane.showMessageDialog(this, "Failed to create user. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
