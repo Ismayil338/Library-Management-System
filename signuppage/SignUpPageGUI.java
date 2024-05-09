@@ -83,6 +83,21 @@ public class SignUpPageGUI extends JFrame {
             return;
         }
 
+        if (!password.matches(".*[A-Z].*")) {
+            JOptionPane.showMessageDialog(this, "Password must contain at least one uppercase letter", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
+        if (!password.matches(".*[a-z].*")) {
+            JOptionPane.showMessageDialog(this, "Password must contain at least one lowercase letter", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
+        if (!password.matches(".*[!@#$%^&*()].*")) {
+            JOptionPane.showMessageDialog(this, "Password must contain at least one symbol", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (UserFileManager.checkUsername(username)) {
             JOptionPane.showMessageDialog(this, "Username already exists", "Error", JOptionPane.ERROR_MESSAGE);
             return;

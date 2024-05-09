@@ -101,7 +101,7 @@ public class PersonalDatabasePanel extends JPanel {
                 }
             }
         });
-        //initializeSorting(dataTable);
+        initializeSorting(dataTable);
     }
 
     public void loadPersonalCsvData(String username) {
@@ -220,8 +220,4 @@ public class PersonalDatabasePanel extends JPanel {
             return userRating1.compareTo(userRating2);
         });
     }
-
-
-    
-    
 }
