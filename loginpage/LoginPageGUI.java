@@ -16,7 +16,7 @@ public class LoginPageGUI extends JFrame {
     public static ResourceBundle messages = ResourceBundle.getBundle("languages.messages", new Locale("az", "AZ"));
 
     public LoginPageGUI() {
-        setTitle("Login");
+        setTitle(messages.getString("textForLoginPageTitle"));
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
