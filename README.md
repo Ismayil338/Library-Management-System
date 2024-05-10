@@ -51,6 +51,12 @@
 ### 5. Users Management (Admin):
    ### Admins can view and delete user accounts from the system.
 
+## LanguageSelectionGUI
+
+### The `LanguageSelectionGUI` class provides a graphical user interface for selecting a language from a dropdown list.
+
+### Note: Our program starts to run from `ProgramStart.java` class.
+
 ## Technologies Used
 
 ### Java
@@ -61,4 +67,4 @@
 ### Farid Karimli: https://github.com/ferid-kerimli
 ### Ali Hasanli: https://github.com/AliHasanli736
 ### Ismayil Panahli: https://github.com/Ismayil-Panahli
-### Kanan Abilov: 
+### Kanan Abilov: https://github.com/Kananabilov
