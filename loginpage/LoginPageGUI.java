@@ -2,6 +2,8 @@ package loginpage;
 
 import signuppage.*;
 import dashboard.*;
+import languageselection.LanguageSelectionGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Locale;
@@ -11,14 +13,7 @@ public class LoginPageGUI extends JFrame {
     private final JTextField usernameField;
     private final JPasswordField passwordField;
     @SuppressWarnings("deprecation")
-    private static ResourceBundle messages = ResourceBundle.getBundle("languages.messages", new Locale("az", "AZ"));
-
-    private JLabel titleLabel;
-    private JLabel usernameLabel;
-    private JLabel passwordLabel;
-    private JLabel signUpLabel;
-    private JButton loginButton;
-    private JButton returnToLanguageChangeWindow;
+    public static ResourceBundle messages = ResourceBundle.getBundle("languages.messages", new Locale("az", "AZ"));
 
     public LoginPageGUI() {
         setTitle("Login");
@@ -29,19 +24,19 @@ public class LoginPageGUI extends JFrame {
         setResizable(false);
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titleLabel = new JLabel(messages.getString("titleLabelText"));
+        JLabel titleLabel = new JLabel(messages.getString("titleLabelTextForLogin"));
         titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
         headerPanel.add(titleLabel);
 
         JPanel formPanel = new JPanel(new GridLayout(2, 1));
         JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        usernameLabel = new JLabel(messages.getString("usernameLabelText"));
+        JLabel usernameLabel = new JLabel(messages.getString("usernameLabelTextForLogin"));
         usernameField = new JTextField(20);
         usernamePanel.add(usernameLabel);
         usernamePanel.add(usernameField);
 
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        passwordLabel = new JLabel(messages.getString("passwordLabelText"));
+        JLabel passwordLabel = new JLabel(messages.getString("passwordLabelTextForLogin"));
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
@@ -50,10 +45,10 @@ public class LoginPageGUI extends JFrame {
         formPanel.add(passwordPanel);
 
         JPanel buttonsPanel = new JPanel(new BorderLayout());
-        signUpLabel = new JLabel(messages.getString("signUpLabelText"), SwingConstants.CENTER);
+        JLabel signUpLabel = new JLabel(messages.getString("signUpLabelText"), SwingConstants.CENTER);
         signUpLabel.setForeground(Color.BLUE);
-        loginButton = new JButton(messages.getString("loginButtonText"));
-        returnToLanguageChangeWindow = new JButton(messages.getString("returnToLanguageChangeWindow"));
+        JButton loginButton = new JButton(messages.getString("loginButtonText"));
+        JButton returnToLanguageChangeWindow = new JButton(messages.getString("returnToLanguageChangeWindow"));
 
         signUpLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
@@ -61,7 +56,7 @@ public class LoginPageGUI extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dispose();
                 EventQueue.invokeLater(() -> SwingUtilities.invokeLater(() -> {
-                    JFrame signUpFrame = new SignUpPageGUI(LoginPageGUI.this);
+                    JFrame signUpFrame = new SignUpPageGUI(LoginPageGUI.this, messages);
                     signUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     signUpFrame.setVisible(true);
                 }));
@@ -87,12 +82,12 @@ public class LoginPageGUI extends JFrame {
 
     private void login(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, messages.getString("validCredentialsWarning"), "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("validCredentialsWarning"), messages.getString("warningText"), JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (!UserFileManagerForLogin.checkCredentials(username, password)) {
-            JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Invalid username or password", messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
