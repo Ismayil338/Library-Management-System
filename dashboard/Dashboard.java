@@ -8,62 +8,63 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ResourceBundle;
 
 public class Dashboard extends JFrame {
     public final String username;
 
-    public Dashboard(String username, String role, boolean isAdmin) {
+    public Dashboard(String username, String role, boolean isAdmin, ResourceBundle messages) {
         this.username = username;
-        setTitle("Dashboard");
+        setTitle(messages.getString("titleLabelTextForDashboard"));
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        initComponents(username, role, isAdmin);
+        initComponents(username, role, isAdmin, messages);
     }
 
-    private void initComponents(String username, String role, boolean isAdmin) {
-        JPanel topPanel = createTopPanel(username, role);
+    private void initComponents(String username, String role, boolean isAdmin, ResourceBundle messages) {
+        JPanel topPanel = createTopPanel(username, role, messages);
         add(topPanel, BorderLayout.NORTH);
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Home Page", new HomePagePanel());
+        tabbedPane.addTab(messages.getString("textForHomePage"), new HomePagePanel());
 
         if (role.equals("admin")) {
             DefaultTableModel usersModel = new DefaultTableModel();
-            usersModel.addColumn("Username");
-            usersModel.addColumn("Password");
+            usersModel.addColumn(messages.getString("usersPanelUsernameColumn"));
+            usersModel.addColumn(messages.getString("usersPanelPasswordColumn"));
 
-            UsersPanel usersPanel = new UsersPanel(usersModel);
+            UsersPanel usersPanel = new UsersPanel(usersModel, messages);
             usersPanel.loadUsersData();
-            tabbedPane.addTab("Users", usersPanel);
+            tabbedPane.addTab(messages.getString("textForUsersPanel"), usersPanel);
         }
         
         if (!role.equals("admin")) {
             DefaultTableModel personalModel = new DefaultTableModel();
-            personalModel.addColumn("Title");
-            personalModel.addColumn("Author");
-            personalModel.addColumn("Rating");
-            personalModel.addColumn("Review");
-            personalModel.addColumn("Status");
-            personalModel.addColumn("Time spent");
-            personalModel.addColumn("Start date");
-            personalModel.addColumn("End Date");
-            personalModel.addColumn("User rating");
-            personalModel.addColumn("User review");
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseTitleColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseAuthorColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseReviewColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseRatingColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseStatusColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseTimeSpentColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseStartDateColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseEndDateColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseUserReviewColumn"));
+            personalModel.addColumn(messages.getString("textForPersonalDatabaseUserRatingColumn"));
 
-            PersonalDatabasePanel personalDatabasePanel = new PersonalDatabasePanel(personalModel, username);
+            PersonalDatabasePanel personalDatabasePanel = new PersonalDatabasePanel(personalModel, username, messages);
             personalDatabasePanel.loadPersonalCsvData(username);
 
-            tabbedPane.addTab("Personal Database", personalDatabasePanel);
+            tabbedPane.addTab(messages.getString("textForPersonalDatabasePanel"), personalDatabasePanel);
         }
 
         DefaultTableModel generalModel = new DefaultTableModel();
-        generalModel.addColumn("Title");
-        generalModel.addColumn("Author");
-        generalModel.addColumn("Review");
-        generalModel.addColumn("Rating");
+        generalModel.addColumn(messages.getString("textForPersonalDatabaseTitleColumn"));
+        generalModel.addColumn(messages.getString("textForPersonalDatabaseAuthorColumn"));
+        generalModel.addColumn(messages.getString("textForPersonalDatabaseReviewColumn"));
+        generalModel.addColumn(messages.getString("textForPersonalDatabaseRatingColumn"));
 
-        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(username, generalModel, isAdmin);
+        GeneralDatabasePanel generalDatabasePanel = new GeneralDatabasePanel(username, generalModel, isAdmin, messages);
         String sourceFilePath = "generaldatabase/brodsky.csv";
         String destinationFilePath = "generaldatabase/generaldatabase.csv";
         File sourceFile = new File(sourceFilePath);
@@ -73,7 +74,7 @@ public class Dashboard extends JFrame {
             try {
                 csvFile.createNewFile();
                 Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                generalDatabasePanel.loadCSVData();
+                generalDatabasePanel.loadCSVData(messages);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,20 +82,20 @@ public class Dashboard extends JFrame {
         
         generalDatabasePanel.loadCSVDataAfterDatabaseCreated();
 
-        tabbedPane.addTab("General Database", generalDatabasePanel);
+        tabbedPane.addTab(messages.getString("textForGeneralDatabasePanel"), generalDatabasePanel);
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    private JPanel createTopPanel(String username, String role) {
+    private JPanel createTopPanel(String username, String role, ResourceBundle messages) {
         JPanel topPanel = new JPanel(new BorderLayout());
-        JLabel welcomeLabel = new JLabel("Welcome to Library", SwingConstants.CENTER);
+        JLabel welcomeLabel = new JLabel(messages.getString("textForDashboardWelcome"), SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 21));
         topPanel.add(welcomeLabel, BorderLayout.NORTH);
 
-        JLabel userDetailsLabel = new JLabel("Welcome, " + username + " | Role: " + role, SwingConstants.RIGHT);
+        JLabel userDetailsLabel = new JLabel(messages.getString("textForUserWelcome") + " " + username + " | Role: " + role, SwingConstants.RIGHT);
         topPanel.add(userDetailsLabel, BorderLayout.SOUTH);
 
-        JButton logoutButton = new JButton("Logout");
+        JButton logoutButton = new JButton(messages.getString("textForLogOutButton"));
         logoutButton.addActionListener(e -> {
             dispose();
             LoginPageGUI loginPage = new LoginPageGUI();

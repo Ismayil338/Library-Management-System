@@ -7,18 +7,19 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class UsersPanel extends JPanel {
     private DefaultTableModel usersModel;
 
-    public UsersPanel(DefaultTableModel model) {
+    public UsersPanel(DefaultTableModel model, ResourceBundle messages) {
         this.usersModel = model;
         JTable usersTable = new JTable(usersModel);
         JScrollPane scrollPane = new JScrollPane(usersTable);
         add(scrollPane);
 
         JPanel buttonPanel = new JPanel();
-        JButton deleteButton = new JButton("Delete");
+        JButton deleteButton = new JButton(messages.getString("textForDeleteButton"));
         buttonPanel.add(deleteButton);
 
         add(buttonPanel, BorderLayout.NORTH);
@@ -29,7 +30,7 @@ public class UsersPanel extends JPanel {
                 model.removeRow(selectedRow); // Remove selected row from personal database
                 DeleteUsersData();
             } else {
-                JOptionPane.showMessageDialog(this, "Please select a row to delete.", "Delete Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, messages.getString("textForUserDeleteError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
             }
         });
 

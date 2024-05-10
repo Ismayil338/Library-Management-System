@@ -9,13 +9,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ResourceBundle;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class PersonalDatabasePanel extends JPanel {
     public final DefaultTableModel model;
 
-    public PersonalDatabasePanel(DefaultTableModel model, String username) {
+    public PersonalDatabasePanel(DefaultTableModel model, String username, ResourceBundle messages) {
         this.model = model;
         setLayout(new BorderLayout());
 
@@ -24,12 +26,12 @@ public class PersonalDatabasePanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        JButton startButton = new JButton("Start");
-        JButton endButton = new JButton("End");
-        JButton deleteButton = new JButton("Delete");
+        JButton startButton = new JButton(messages.getString("textForPersonalDatabaseStartButton"));
+        JButton endButton = new JButton(messages.getString("textForPersonalDatabaseEndButton"));
+        JButton deleteButton = new JButton(messages.getString("textForPersonalDatabaseDeleteButton"));
         JButton refreshButton = new JButton("Refresh");
         JTextField searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
+        JButton searchButton = new JButton(messages.getString("textForPersonalDatabaseSearchButton"));
 
         buttonPanel.add(startButton);
         buttonPanel.add(endButton);
@@ -47,7 +49,7 @@ public class PersonalDatabasePanel extends JPanel {
         deleteButton.addActionListener(e -> {
             int selectedRow = dataTable.getSelectedRow();
             if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, messages.getString("textForUserDeleteError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -55,7 +57,7 @@ public class PersonalDatabasePanel extends JPanel {
                     "Confirm Deletion", JOptionPane.YES_NO_OPTION);
             if (confirmDelete == JOptionPane.YES_OPTION) {
                 model.removeRow(selectedRow);
-                savePersonalCSVData(username);
+                savePersonalCSVData(username, messages);
             }
         });
 
@@ -143,7 +145,7 @@ public class PersonalDatabasePanel extends JPanel {
         }
     }
 
-    public void savePersonalCSVData(String username) {
+    public void savePersonalCSVData(String username, ResourceBundle messages) {
         String filePath = "userdatabases/" + username + ".csv";
         try (FileWriter writer = new FileWriter(filePath)) {
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -158,7 +160,7 @@ public class PersonalDatabasePanel extends JPanel {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("textForSaveCSVDataError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
         }
     }
 

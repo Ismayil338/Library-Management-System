@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ResourceBundle;
+
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -19,7 +21,7 @@ public class GeneralDatabasePanel extends JPanel {
     private int BookID = 1;
     private final int[] visibleColumns = { 1, 2, 3, 4 };
 
-    public GeneralDatabasePanel(String username, DefaultTableModel model, boolean isAdmin) {
+    public GeneralDatabasePanel(String username, DefaultTableModel model, boolean isAdmin, ResourceBundle messages) {
         this.model = model;
         setLayout(new BorderLayout());
 
@@ -30,24 +32,24 @@ public class GeneralDatabasePanel extends JPanel {
 
         JPanel buttonPanel = new JPanel();
         JTextField searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
+        JButton searchButton = new JButton(messages.getString("textForSearchButton"));
 
         if (isAdmin) {
-            JButton addButton = new JButton("Add");
+            JButton addButton = new JButton(messages.getString("textForAddButton"));
             buttonPanel.add(addButton);
-            addButton.addActionListener(e -> addData());
+            addButton.addActionListener(e -> addData(messages));
 
-            JButton deleteButton = new JButton("Delete");
+            JButton deleteButton = new JButton(messages.getString("textForDeleteButton"));
             buttonPanel.add(deleteButton);
-            deleteButton.addActionListener(e -> deleteSelectedRow());
+            deleteButton.addActionListener(e -> deleteSelectedRow(messages));
 
-            JButton updateButton = new JButton("Update");
+            JButton updateButton = new JButton(messages.getString("textForUpdateButton"));
             buttonPanel.add(updateButton);
-            updateButton.addActionListener(e -> updateSelectedRow(username));
+            updateButton.addActionListener(e -> updateSelectedRow(username, messages));
         } else {
-            JButton addToPersonalDatabaseButton = new JButton("Add to personal database");
+            JButton addToPersonalDatabaseButton = new JButton(messages.getString("textForAddToPersonalDatabaseButton"));
             buttonPanel.add(addToPersonalDatabaseButton);
-            addToPersonalDatabaseButton.addActionListener(e -> addToPersonalDatabase(username));
+            addToPersonalDatabaseButton.addActionListener(e -> addToPersonalDatabase(username, messages));
         }
 
         buttonPanel.add(searchField);
@@ -123,7 +125,7 @@ public class GeneralDatabasePanel extends JPanel {
         });
     }
 
-    public void loadCSVData() {
+    public void loadCSVData(ResourceBundle messages) {
         try (BufferedReader br = new BufferedReader(new FileReader("generaldatabase/generaldatabase.csv"))) {
             String line;
             boolean skipFirstRow = true; // Flag to skip the first row
@@ -158,7 +160,7 @@ public class GeneralDatabasePanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        saveCSVData();
+        saveCSVData(messages);
     }
 
     public void loadCSVDataAfterDatabaseCreated() {
@@ -179,17 +181,17 @@ public class GeneralDatabasePanel extends JPanel {
         }
     }
 
-    private void updateSelectedRow(String username) {
+    private void updateSelectedRow(String username, ResourceBundle messages) {
 
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Select a row to update.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("textForUpdateRowWarning"), messages.getString("warningText"), JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String bookID = getBookIdFromGeneralDatabase(selectedRow);
         if (bookID == null) {
-            JOptionPane.showMessageDialog(this, "Error retrieving BookID.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("textForBookIDError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -211,11 +213,11 @@ public class GeneralDatabasePanel extends JPanel {
             }
 
             // Save changes to the CSV files
-            saveCSVData();
+            saveCSVData(messages);
         }
     }        
 
-    private void saveCSVData() {
+    private void saveCSVData(ResourceBundle messages) {
         String filePath = "generaldatabase/generaldatabase.csv";
         try (FileWriter writer = new FileWriter(filePath)) {
             // Write the header
@@ -239,7 +241,7 @@ public class GeneralDatabasePanel extends JPanel {
             BookID = 1;
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error saving data to CSV file.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("textForSaveCSVDataError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -247,7 +249,7 @@ public class GeneralDatabasePanel extends JPanel {
         return s.replace("\"", "");
     }
 
-    public void addData() {
+    public void addData(ResourceBundle messages) {
         JTextField titleField = new JTextField(10);
         JTextField authorField = new JTextField(10);
 
@@ -263,15 +265,15 @@ public class GeneralDatabasePanel extends JPanel {
             String author = authorField.getText().trim();
             if (!title.isEmpty() && !author.isEmpty()) {
                 model.addRow(new Object[] { title, author, "No Review", "No Rating" });
-                saveCSVData();
+                saveCSVData(messages);
             } else {
-                JOptionPane.showMessageDialog(this, "Please enter both title and author.", "Error",
+                JOptionPane.showMessageDialog(this, messages.getString("textForUpdateSelectedRowMethod"), messages.getString("errorText"),
                         JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public void deleteSelectedRow() {
+    public void deleteSelectedRow(ResourceBundle messages) {
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -282,21 +284,21 @@ public class GeneralDatabasePanel extends JPanel {
                 "Confirm Deletion", JOptionPane.YES_NO_OPTION);
         if (confirmDelete == JOptionPane.YES_OPTION) {
             model.removeRow(selectedRow);
-            saveCSVData();
+            saveCSVData(messages);
         }
     }
 
-    public void addToPersonalDatabase(String username) {
+    public void addToPersonalDatabase(String username, ResourceBundle messages) {
         int selectedRow = dataTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Select a row to add to your personal database.", "Error",
+            JOptionPane.showMessageDialog(this, messages.getString("textForIfUserDontSelectedRowForAddingPersonalDatabase"), messages.getString("errorText"),
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         String bookID = getBookIdFromGeneralDatabase(selectedRow);
         if (bookID == null) {
-            JOptionPane.showMessageDialog(this, "Error retrieving BookID.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("textForBookIDError"), messages.getString("errorText"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -318,14 +320,14 @@ public class GeneralDatabasePanel extends JPanel {
                 writer.append(rating).append(",");
                 writer.append("Not Started").append("\n");
 
-                JOptionPane.showMessageDialog(this, "Row added to your personal database successfully.", "Success",
+                JOptionPane.showMessageDialog(this, messages.getString("textAfterUserAddingBookToPersonalDatabase"), messages.getString("successText"),
                         JOptionPane.INFORMATION_MESSAGE);
 
-                personalDatabasePanel = new PersonalDatabasePanel(model, username);
+                personalDatabasePanel = new PersonalDatabasePanel(model, username, messages);
                 personalDatabasePanel.loadPersonalCsvData(username);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error adding row to your personal database.", "Error",
+                JOptionPane.showMessageDialog(this, messages.getString("textForErrorWhileAddingToPersonalDatabase"), messages.getString("errorText"),
                         JOptionPane.ERROR_MESSAGE);
             }
         }
