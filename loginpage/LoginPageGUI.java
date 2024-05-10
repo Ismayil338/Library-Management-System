@@ -4,10 +4,21 @@ import signuppage.*;
 import dashboard.*;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class LoginPageGUI extends JFrame {
     private final JTextField usernameField;
     private final JPasswordField passwordField;
+    @SuppressWarnings("deprecation")
+    private static ResourceBundle messages = ResourceBundle.getBundle("languages.messages", new Locale("az", "AZ"));
+
+    private JLabel titleLabel;
+    private JLabel usernameLabel;
+    private JLabel passwordLabel;
+    private JLabel signUpLabel;
+    private JButton loginButton;
+    private JButton returnToLanguageChangeWindow;
 
     public LoginPageGUI() {
         setTitle("Login");
@@ -18,19 +29,19 @@ public class LoginPageGUI extends JFrame {
         setResizable(false);
 
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel titleLabel = new JLabel("Welcome to Library");
+        titleLabel = new JLabel(messages.getString("titleLabelText"));
         titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
         headerPanel.add(titleLabel);
 
         JPanel formPanel = new JPanel(new GridLayout(2, 1));
         JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel = new JLabel(messages.getString("usernameLabelText"));
         usernameField = new JTextField(20);
         usernamePanel.add(usernameLabel);
         usernamePanel.add(usernameField);
 
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel = new JLabel(messages.getString("passwordLabelText"));
         passwordField = new JPasswordField(20);
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
@@ -39,9 +50,10 @@ public class LoginPageGUI extends JFrame {
         formPanel.add(passwordPanel);
 
         JPanel buttonsPanel = new JPanel(new BorderLayout());
-        JLabel signUpLabel = new JLabel("Don't have an account?", SwingConstants.CENTER);
+        signUpLabel = new JLabel(messages.getString("signUpLabelText"), SwingConstants.CENTER);
         signUpLabel.setForeground(Color.BLUE);
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton(messages.getString("loginButtonText"));
+        returnToLanguageChangeWindow = new JButton(messages.getString("returnToLanguageChangeWindow"));
 
         signUpLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
@@ -58,8 +70,11 @@ public class LoginPageGUI extends JFrame {
 
         loginButton.addActionListener(e -> login(usernameField.getText(), new String(passwordField.getPassword())));
 
+        returnToLanguageChangeWindow.addActionListener(e -> openLanguageSelection());
+
         JPanel buttonCenterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonCenterPanel.add(loginButton);
+        buttonCenterPanel.add(returnToLanguageChangeWindow);
         buttonsPanel.add(signUpLabel, BorderLayout.NORTH);
         buttonsPanel.add(buttonCenterPanel, BorderLayout.CENTER);
 
@@ -72,7 +87,7 @@ public class LoginPageGUI extends JFrame {
 
     private void login(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Enter valid username and password", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, messages.getString("validCredentialsWarning"), "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -97,5 +112,14 @@ public class LoginPageGUI extends JFrame {
             dashboardGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             dashboardGUI.setVisible(true);
         }));
+    }
+
+    public static void setMessagesBundle(ResourceBundle bundle) {
+        messages = bundle;
+    }
+
+    public void openLanguageSelection() {
+        dispose(); // Close the login page
+        EventQueue.invokeLater(LanguageSelectionGUI::new); // Open the language selection GUI
     }
 }
