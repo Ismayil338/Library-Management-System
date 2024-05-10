@@ -14,7 +14,7 @@ public class SignUpPageGUI extends JFrame {
     private final JPasswordField reEnterPasswordField;
 
     public SignUpPageGUI(JFrame loginPageFrame, ResourceBundle messages) {
-        setTitle("Sign Up");
+        setTitle(messages.getString("textForSignUpPageTitle"));
         setSize(300, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
