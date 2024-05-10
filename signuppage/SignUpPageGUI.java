@@ -12,8 +12,6 @@ public class SignUpPageGUI extends JFrame {
     private final JTextField nameField;
     private final JPasswordField passwordField;
     private final JPasswordField reEnterPasswordField;
-    // @SuppressWarnings("deprecation")
-    // private static ResourceBundle messages = ResourceBundle.getBundle("languages.messages", new Locale("az", "AZ"));
 
     public SignUpPageGUI(JFrame loginPageFrame, ResourceBundle messages) {
         setTitle("Sign Up");
