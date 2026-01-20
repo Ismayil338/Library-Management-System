@@ -1,5 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/4zK3HDh5)
-
 # Library Management System
 
 This Java application implements a Library Management System with features for managing general book data, personal book data for users, user authentication, and user roles.
@@ -73,4 +71,5 @@ User Roles: Supports different roles such as admin and regular user with role-ba
 ### Ali Hasanli: https://github.com/AliHasanli736
 ### Ismayil Panahli: https://github.com/Ismayil-Panahli
 ### Kanan Abilov: https://github.com/Kananabilov
+
 
