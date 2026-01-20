@@ -2,21 +2,24 @@
 
 # Library Management System
 
-## This Java application implements a Library Management System with features for managing general book data, personal book data for users, user authentication, and user roles.
+This Java application implements a Library Management System with features for managing general book data, personal book data for users, user authentication, and user roles.
 
 ## Features
 
-### General Database Management: Allows administrators to add, update, and delete books in the general database.
-## Personal Database Management: Allows users to add books from the general database to their personal database, and manage their personal reading data.
-### User Authentication: Includes user registration, login, and logout functionalities.
-### User Roles: Supports different roles such as admin and regular user with role-based access control.
+General Database Management: Allows administrators to add, update, and delete books in the general database.
+
+Personal Database Management: Allows users to add books from the general database to their personal database, and manage their personal reading data.
+
+User Authentication: Includes user registration, login, and logout functionalities.
+
+User Roles: Supports different roles such as admin and regular user with role-based access control.
 
 ## Installation
 
-### 1. Clone the repository to your local machine.
-### 2. Open the project in your preferred Java IDE.
-### 3. Configure the project settings as needed.
-### 4. Build and run the project.
+1. Clone the repository to your local machine.
+2. Open the project in your preferred Java IDE.
+3. Configure the project settings as needed.
+4. Build and run the project.
 
 ## Development Process
 ### LoginPageGUI: Implements the login page user interface.
@@ -70,3 +73,4 @@
 ### Ali Hasanli: https://github.com/AliHasanli736
 ### Ismayil Panahli: https://github.com/Ismayil-Panahli
 ### Kanan Abilov: https://github.com/Kananabilov
+
