@@ -26,31 +26,28 @@ This Java application implements a Library Management System with features for m
 - **UsersPanel**: Manages user accounts and roles. It allows administrators to view, add, and delete user accounts.
 
 ## Usage
+1. **Login / Register**
+   - Use the provided login page to log in with your username and password.
+   - If you don't have an account, you can register using the sign-up page.
 
-1. Login/Register:
-Use the provided login page to log in with your username and password.
+2. **Dashboard**
+   - Upon successful login, you'll be directed to the dashboard.
+   - The dashboard displays different tabs based on your role (admin or user).
+     - Admins can manage general book data and user accounts.
+     - Users can manage their personal book data and view general book data.
 
-If you don't have an account, you can register using the sign-up page.
+3. **General Database**
+   - Admins can add, update, and delete books in the general database.
+   - Users can view general book data and add books to their personal database.
 
-3. Dashboard:
-Upon successful login, you'll be directed to the dashboard.
+4. **Personal Database**
+   - Users can manage their personal book data, including:
+     - Starting entries
+     - Ending entries
+     - Deleting entries
 
-The dashboard displays different tabs based on your role (admin or user).
-
-Admins can manage general book data and user accounts.
-
-Users can manage their personal book data and view general book data.
-
-5. General Database:
-Admins can add, update, and delete books in the general database.
-
-Users can view general book data and add books to their personal database.
-
-7. Personal Database:
-Users can manage their personal book data, including starting, ending, and deleting entries.
-
-8. Users Management (Admin):
-Admins can view and delete user accounts from the system.
+5. **Users Management (Admin)**
+   - Admins can view and delete user accounts from the system.
 
 ## LanguageSelectionGUI
 The `LanguageSelectionGUI` class provides a graphical user interface for selecting a language from a dropdown list.
@@ -67,6 +64,7 @@ Note: Our program starts to run from `ProgramStart.java` class.
 - Ali Hasanli: https://github.com/AliHasanli736
 - Ismayil Panahli: https://github.com/Ismayil-Panahli
 - Kanan Abilov: https://github.com/Kananabilov
+
 
 
 
