@@ -62,11 +62,5 @@ Note: Our program starts to run from `ProgramStart.java` class.
 ## Contributors
 - Farid Karimli: https://github.com/ferid-kerimli
 - Ali Hasanli: https://github.com/AliHasanli736
-- Ismayil Panahli: https://github.com/Ismayil-Panahli
+- Ismayil Panahli: https://github.com/Ismayil338
 - Kanan Abilov: https://github.com/Kananabilov
-
-
-
-
-
-
