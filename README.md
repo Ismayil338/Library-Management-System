@@ -173,3 +173,25 @@ classDiagram
     LoginPageGUI -- SignUpPageGUI
     SignUpPageGUI ..> UserFileManagerForSignUp : <<uses>>
 ```
+
+## UI Snippets
+### Language Selection
+![](Media/1.jpg)
+
+### Login Page
+![](Media/2.jpg)
+
+### Sign Up Page
+![](Media/3.jpg)
+
+### Home Page
+![](Media/4.jpg)
+
+### Users Panel
+![](Media/5.jpg)
+
+### General Database Panel
+![](Media/6.jpg)
+
+### Personal Database Panel
+![](Media/7.jpg)
