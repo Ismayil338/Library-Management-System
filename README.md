@@ -59,7 +59,7 @@ Note: Our program starts to run from `ProgramStart.java` class.
 - Swing (GUI toolkit)
 - CSV file handling
 
-## Contributions table
+## Contributors
 | Team Members | Contributions | Contribution Percentage |
 | :--- | :--- | :--- |
 | **[Farid Karimli](https://github.com/ferid-kerimli)** | Created Dashboard, General database, Personal database, HomePage, UsersPanel, and language selection class. | 29% |
